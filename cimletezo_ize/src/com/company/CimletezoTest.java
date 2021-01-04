@@ -1,8 +1,11 @@
 package com.company;
 
+import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,10 +13,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CimletezoTest {
 
-    Cimletezo cimletezo;
+    Cimletezo cimletezo = new Cimletezo();
     HashMap<Integer, Integer> hash = new HashMap<>();
 
     public HashMap<Integer, Integer> convertListAfterJava8(List<Integer> list) {
@@ -26,7 +30,7 @@ public class CimletezoTest {
 
     @ParameterizedTest
     @MethodSource("cimletek")
-    void cimletMethodTest(int osszeg, List<Integer> list) {
+    void cimletMethodTestValid(int osszeg, List<Integer> list) {
         var result = cimletezo.cimletezoMethod(osszeg);
         hash = convertListAfterJava8(list);
         assertEquals(result, hash);
@@ -38,4 +42,16 @@ public class CimletezoTest {
                 Arguments.of(20000,Arrays.asList(1,20000))
         );
     }
+
+
+
+    @ParameterizedTest
+    @ValueSource(ints = {-210, 12, 0})
+    void cimletMethodTestInvalid(int osszeg) {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> cimletezo.cimletezoMethod(osszeg)
+        );
+    }
+
 }
