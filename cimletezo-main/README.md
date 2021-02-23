@@ -1,2 +1,0 @@
-# cimletezo
-forint cimletezo
